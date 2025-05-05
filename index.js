@@ -1,9 +1,9 @@
-const { Person } = require("./person");
+// const { Person } = require("./person");
+const connectToDatabase = require("./src/database/connect");
+const UserModel = require("./src/models/user.model");
+const express = require("express");
+require("./modules/http");
 
-require('./modules/http')
 
-// require("./modules/path")
 
-// const person = new Person ("felipe");
-
-// console.log(person.sayMyName());
+connectToDatabase();

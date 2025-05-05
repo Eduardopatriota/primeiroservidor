@@ -1,26 +1,30 @@
-const http = require("http");
+const express = require("express");
+const UserModel = require("../src/models/user.model");
+const app = express();
+app.use(express.json());
 
-const port = 8080;
+// rotas de GET
+app.get("/home", (req, res) => {
+  res.status(200).contentType("text/html").send("<h1>home page</h1>");
+});
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/home") {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end("<h1>home page</h1>");
-  }
-  if (req.url === "/user") {
-    const users = [
-      {
-        name: "eduardo",
-        email: "eduardo@email.com",
-      },
-      {
-        name: "Joohn Doe",
-        email: "jimi@email.com",
-      },
-    ];
-    res.writeHead(200, { "Content-Type": "text/json" });
-    res.end(JSON.stringify(users));
+app.get("/user", (req, res) => {
+  const users = [
+    { name: "eduardo", email: "eduardo@email.com" },
+    { name: "Joohn Doe", email: "jimi@email.com" },
+  ];
+  res.status(200).json(users);
+});
+
+// rota de POST para criar usuário
+app.post("/users", async (req, res) => {
+  try {
+    const user = await UserModel.create(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 });
 
-server.listen(port, () => console.log(`rodando na porta ${port}`));
+const port = 8080;
+app.listen(port, () => console.log(`🚀 rodando na porta ${port}`));
